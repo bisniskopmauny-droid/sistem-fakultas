@@ -387,9 +387,10 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // =====================================================================
-// LOCAL DATA VARIABLES (Diubah semua keys-nya menghindari konflik)
+// LOCAL DATA VARIABLES & CACHE
 // =====================================================================
 const DEFAULT_FAKULTAS = [
   {code:'FT', name:'Fakultas Teknik'},
@@ -400,30 +401,36 @@ const DEFAULT_FAKULTAS = [
 
 let FAKULTAS_LIST = []; 
 let fakultasAddedAt = {}; 
+
+// Inisialisasi dari Cache Lokal agar tahan terhadap Refresh
 try { fakultasAddedAt = JSON.parse(localStorage.getItem('fakultas_added_v1') || '{}'); } catch(e) {}
+try {
+  const cachedList = localStorage.getItem('fak_list_cache_v1');
+  if (cachedList) FAKULTAS_LIST = JSON.parse(cachedList);
+  else FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t}));
+} catch(e) { FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t})); }
+
 function saveAddedAt() { try { localStorage.setItem('fakultas_added_v1', JSON.stringify(fakultasAddedAt)); } catch(e) {} }
+function saveFakultasCache() { try { localStorage.setItem('fak_list_cache_v1', JSON.stringify(FAKULTAS_LIST)); } catch(e) {} }
 
 async function loadFakultas() {
   const url = getGsUrl();
-  if (!url) {
-    if (!FAKULTAS_LIST.length) FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t}));
-    return;
-  }
+  if (!url) return;
   try {
     const json = await jsonpRequest(url + '?action=read-talents&t=' + Date.now(), 8000);
     if (json.status === 'ok' && Array.isArray(json.talents)) {
       if (json.talents.length > 0) {
         FAKULTAS_LIST = json.talents;
-      } else {
-        if (!FAKULTAS_LIST.length) FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t}));
-        for (const t of FAKULTAS_LIST) {
-          await jsonpRequest(url + '?action=add-talent&name=' + encodeURIComponent(t.name) + '&code=' + encodeURIComponent(t.code), 6000).catch(()=>{});
-        }
+        saveFakultasCache(); // Simpan ke cache jika berhasil tarik dari Sheets
       }
+      renderFakultasList();
+    } else {
+      // Jika respons tidak sesuai (misal salah versi script), tetap render cache
       renderFakultasList();
     }
   } catch(e) {
-    if (!FAKULTAS_LIST.length) FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t}));
+    // Jika koneksi gagal, tetap render apa yang ada di cache lokal
+    renderFakultasList();
   }
 }
 
@@ -478,7 +485,7 @@ function saveGsUrl() {
   const v = document.getElementById('gsUrl').value.trim();
   localStorage.setItem('fak_gs_url', v);
   const st = document.getElementById('url-status');
-  if (v.includes('script.google.com')) { st.className = 'gs-status ok'; st.textContent = 'URL tersimpan.'; startSync(); }
+  if (v.includes('script.google.com')) { st.className = 'gs-status ok'; st.textContent = 'URL tersimpan.'; startSync(); startDataSync(); }
   else if (v) { st.className = 'gs-status fail'; st.textContent = 'URL tidak valid.'; }
   else { st.className = 'gs-status'; }
 }
@@ -581,8 +588,9 @@ async function testConnection() {
     const json = await jsonpRequest(url + '?action=read&t=' + Date.now());
     if (json.status === 'ok') {
       st.className = 'gs-status ok';
-      st.textContent = `Berhasil! Ditemukan ${json.data.length} baris data.`;
+      st.textContent = `Berhasil! Ditemukan ${json.data ? json.data.length : 0} baris data.`;
       startSync();
+      startDataSync(); // Memaksa update fakultas saat tes koneksi berhasil
     } else {
       st.className = 'gs-status fail'; st.textContent = 'Format respons tidak sesuai.';
     }
@@ -840,6 +848,7 @@ async function saveFakultas() {
       if (idx !== -1) {
         if (editingCode !== code && fakultasAddedAt[editingCode]) { fakultasAddedAt[code] = fakultasAddedAt[editingCode]; delete fakultasAddedAt[editingCode]; saveAddedAt(); }
         FAKULTAS_LIST[idx] = {code, name};
+        saveFakultasCache(); // update cache
       }
       showToast('Berhasil diperbarui!');
     } else { showToast('Gagal update ke Sheets', true); }
@@ -847,6 +856,7 @@ async function saveFakultas() {
     const ok = await pushAddData({name, code});
     if (ok) {
       FAKULTAS_LIST.push({code, name});
+      saveFakultasCache(); // update cache
       fakultasAddedAt[code] = Date.now(); saveAddedAt();
       showToast('Fakultas ditambahkan!');
     } else { showToast('Gagal simpan ke Sheets', true); }
@@ -871,6 +881,7 @@ async function confirmDelete() {
   const ok = await pushDeleteData(deletingCode);
   if (ok) {
     FAKULTAS_LIST = FAKULTAS_LIST.filter(t => t.code !== deletingCode);
+    saveFakultasCache(); // update cache
     delete fakultasAddedAt[deletingCode]; saveAddedAt();
     showToast('Berhasil dihapus.');
   } else { showToast('Gagal menghapus', true); }
@@ -952,7 +963,7 @@ async function importFakultasData() {
   for (const t of importBatch) {
     if (await pushAddData(t)) { FAKULTAS_LIST.push(t); fakultasAddedAt[t.code] = Date.now(); successCount++; }
   }
-  saveAddedAt();
+  saveFakultasCache(); // Update cache
   confirmBtn.disabled = false; confirmBtn.textContent = 'Import data';
   if (successCount > 0) showToast(`${successCount} fakultas berhasil diimport!`);
   else showToast('Gagal import', true);
@@ -994,7 +1005,7 @@ renderRecent();
 if (getGsUrl()) {
   showOfflineBanner(true); startSync(); startDataSync();
 } else {
-  FAKULTAS_LIST = DEFAULT_FAKULTAS.map(t => ({...t}));
+  renderFakultasList();
   setSyncBadge('off', 'Belum tersinkron — atur URL di Pengaturan');
 }
 document.addEventListener('visibilitychange', () => {
