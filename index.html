@@ -4,156 +4,188 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Sistem Kasir Fakultas</title>
-<meta name="theme-color" content="#1D9E75">
+<meta name="theme-color" content="#4F46E5">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234F46E5'/%3E%3Ctext x='50' y='60' font-size='30' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'%3EKIP%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234F46E5'/%3E%3Ctext x='50' y='60' font-size='30' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'%3EKIP%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css">
 <style>
 :root{
-  --surface-0:#F7F6F2; --surface-1:#EFEDE7; --surface-2:#FFFFFF;
-  --border:#DFDCD3; --text-primary:#1A1A18; --text-secondary:#6B6963;
-  --text-muted:#9B988F; --radius:10px;
-  --green:#1D9E75; --green-dark:#0F6E56; --green-bg:#E1F5EE; --green-border:#9FE1CB;
-  --red:#A32D2D; --red-bg:#FCEBEB; --red-border:#F09595;
+  --surface-0:#F3F4F6; /* Lighter modern background */
+  --surface-1:#E5E7EB;
+  --surface-2:#FFFFFF;
+  --border:#D1D5DB;
+  --text-primary:#1F2937;
+  --text-secondary:#4B5563;
+  --text-muted:#9CA3AF;
+  --radius:12px;
+  
+  /* NEW COLOURFUL PALETTE */
+  --primary:#4F46E5; /* Indigo */
+  --primary-dark:#3730A3;
+  --primary-bg:#EEF2FF;
+  --primary-border:#C7D2FE;
+  --accent:#EC4899; /* Pink */
+  
+  --red:#EF4444;
+  --red-bg:#FEF2F2;
+  --red-border:#FCA5A5;
   --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--surface-1);}
 .app{max-width:480px;margin:0 auto;background:var(--surface-0);min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,0.08);}
-.header{background:var(--surface-2);border-bottom:.5px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px}
-.logo{width:36px;height:36px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px;flex-shrink:0}
-.header h1{font-size:15px;font-weight:500;color:var(--text-primary)}
-.header p{font-size:12px;color:var(--text-secondary)}
-.tab-bar{display:flex;background:var(--surface-1);border-bottom:.5px solid var(--border);padding:0 4px}
-.tab{flex:1;padding:11px 6px;font-size:12px;font-weight:500;color:var(--text-secondary);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:4px}
-.tab.active{color:var(--green-dark);border-bottom-color:var(--green)}
-.tab i{font-size:15px}
+
+/* Modern Gradient Header */
+.header{background:linear-gradient(135deg, var(--primary), var(--accent));border-bottom:none;padding:20px;display:flex;align-items:center;gap:14px;color:#fff;}
+.logo{width:42px;height:42px;background:rgba(255,255,255,0.25);backdrop-filter:blur(4px);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:18px;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.header h1{font-size:16px;font-weight:600;color:#fff;line-height:1.2}
+.header p{font-size:12px;color:rgba(255,255,255,0.85);margin-top:2px}
+
+.tab-bar{display:flex;background:var(--surface-2);border-bottom:1px solid var(--border);padding:0 4px}
+.tab{flex:1;padding:12px 6px;font-size:12px;font-weight:500;color:var(--text-secondary);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab i{font-size:16px}
 .page{display:none;padding:16px;flex:1}
 .page.active{display:block}
-.card{background:var(--surface-2);border:.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px}
-.card-title{font-size:13px;color:var(--text-secondary);margin-bottom:12px;font-weight:500;display:flex;align-items:center;gap:6px}
+.card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+.card-title{font-size:13px;color:var(--text-secondary);margin-bottom:14px;font-weight:600;display:flex;align-items:center;gap:6px}
 
 /* outlet grid */
 .outlet-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.outlet-btn{padding:18px 14px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--surface-1);cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:10px}
-.outlet-btn:hover,.outlet-btn.selected{border-color:var(--green);background:var(--green-bg)}
-.ob-dot{width:10px;height:10px;border-radius:50%;background:#B4B2A9;flex-shrink:0;transition:background .15s}
-.outlet-btn.selected .ob-dot,.outlet-btn:hover .ob-dot{background:var(--green)}
+.outlet-btn{padding:18px 14px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--surface-0);cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px}
+.outlet-btn:hover,.outlet-btn.selected{border-color:var(--primary);background:var(--primary-bg);box-shadow:0 4px 12px rgba(79,70,229,0.08)}
+.ob-dot{width:10px;height:10px;border-radius:50%;background:#B4B2A9;flex-shrink:0;transition:background .2s}
+.outlet-btn.selected .ob-dot,.outlet-btn:hover .ob-dot{background:var(--primary)}
 .ob-name{font-size:14px;font-weight:500;color:var(--text-primary);line-height:1.3}
 
 /* badges & inputs */
-.selected-badge{background:var(--green-bg);border:.5px solid var(--green-border);border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.selected-badge i{color:var(--green-dark);font-size:18px}
-.selected-badge span{font-size:13px;color:var(--green-dark);font-weight:500}
-.code-input{width:100%;padding:13px 14px;font-size:18px;font-weight:500;letter-spacing:2px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);text-transform:uppercase;outline:none;transition:border-color .15s;margin-bottom:8px}
-.code-input:focus{border-color:var(--green)}
+.selected-badge{background:var(--primary-bg);border:1px solid var(--primary-border);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.selected-badge i{color:var(--primary-dark);font-size:18px}
+.selected-badge span{font-size:13px;color:var(--primary-dark);font-weight:600}
+.code-input{width:100%;padding:14px;font-size:18px;font-weight:600;letter-spacing:2px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-0);color:var(--text-primary);text-transform:uppercase;outline:none;transition:all .2s;margin-bottom:8px}
+.code-input:focus{border-color:var(--primary);background:var(--surface-2);box-shadow:0 0 0 3px var(--primary-bg)}
 .code-input::placeholder{letter-spacing:0;font-weight:400;font-size:14px;text-transform:none}
 .hint{font-size:13px;color:var(--text-secondary);margin-bottom:12px;min-height:20px}
-.hint.ok{color:var(--green-dark)}
-.btn-green{width:100%;padding:13px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
-.btn-green:hover{background:var(--green-dark)}
-.btn-green:disabled{background:#B4B2A9;cursor:not-allowed}
-.btn-ghost{width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:.5px solid var(--border);border-radius:var(--radius);font-size:13px;cursor:pointer;margin-top:8px;transition:all .15s}
-.btn-ghost:hover{background:var(--surface-1)}
-.btn-danger{width:100%;padding:10px;background:transparent;color:var(--red);border:.5px solid var(--red-border);border-radius:var(--radius);font-size:13px;cursor:pointer;margin-top:6px;transition:all .15s}
+.hint.ok{color:var(--primary-dark);font-weight:500}
+
+/* Colourful Gradient Buttons */
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg, var(--primary), var(--accent));color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;box-shadow:0 4px 12px rgba(79,70,229,0.25)}
+.btn-primary:hover{background:linear-gradient(135deg, var(--primary-dark), #DB2777);transform:translateY(-1px);box-shadow:0 6px 16px rgba(79,70,229,0.3)}
+.btn-primary:disabled{background:#D1D5DB;box-shadow:none;cursor:not-allowed;transform:none}
+.btn-ghost{width:100%;padding:12px;background:transparent;color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;cursor:pointer;margin-top:8px;transition:all .2s;font-weight:500}
+.btn-ghost:hover{background:var(--surface-0);color:var(--text-primary)}
+.btn-danger{width:100%;padding:12px;background:transparent;color:var(--red);border:1px solid var(--red-border);border-radius:var(--radius);font-size:13px;cursor:pointer;margin-top:6px;transition:all .2s;font-weight:500}
 .btn-danger:hover{background:var(--red-bg)}
 
 /* toast */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green-dark);color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;font-weight:500;z-index:999;transition:transform .25s;pointer-events:none;white-space:nowrap}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg, var(--primary-dark), #DB2777);color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:999;transition:transform .3s cubic-bezier(0.34, 1.56, 0.64, 1);pointer-events:none;white-space:nowrap;box-shadow:0 10px 25px rgba(0,0,0,0.2)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.err{background:var(--red)}
 
 /* recent list */
-.recent-list{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto}
-.ri{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--surface-1);border-radius:var(--radius);border:.5px solid var(--border)}
-.ri-code{font-size:12px;font-weight:500;color:var(--green-dark);background:var(--green-bg);padding:3px 8px;border-radius:4px;font-family:var(--font-mono)}
-.ri-name{flex:1;font-size:12px;color:var(--text-secondary)}
+.recent-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto}
+.ri{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--surface-0);border-radius:var(--radius);border:1px solid var(--border)}
+.ri-code{font-size:12px;font-weight:600;color:var(--primary-dark);background:var(--primary-bg);padding:4px 8px;border-radius:6px;font-family:var(--font-mono)}
+.ri-name{flex:1;font-size:13px;color:var(--text-primary);font-weight:500}
 .ri-time{font-size:11px;color:var(--text-muted);white-space:nowrap}
-.empty{text-align:center;padding:24px;color:var(--text-muted);font-size:13px}
-.empty i{font-size:28px;display:block;margin-bottom:8px}
+.empty{text-align:center;padding:32px 16px;color:var(--text-muted);font-size:13px}
+.empty i{font-size:32px;display:block;margin-bottom:10px;color:var(--border)}
 
 /* stats & charts */
-.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-.sc{background:var(--surface-1);border-radius:var(--radius);padding:10px 12px}
-.sc-label{font-size:11px;color:var(--text-secondary);margin-bottom:4px}
-.sc-val{font-size:22px;font-weight:500;color:var(--text-primary)}
-.sc-val.green{color:var(--green-dark)}
-.filter-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
-.chip{padding:5px 12px;border-radius:20px;border:.5px solid var(--border);background:var(--surface-1);font-size:12px;cursor:pointer;white-space:nowrap;color:var(--text-secondary);font-weight:500}
-.chip.active{background:var(--green);border-color:var(--green);color:#fff}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.sc{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.02)}
+.sc-label{font-size:11px;color:var(--text-secondary);margin-bottom:6px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+.sc-val{font-size:24px;font-weight:600;color:var(--text-primary)}
+.sc-val.primary{background:-webkit-linear-gradient(135deg, var(--primary), var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* filter chips - colourful */
+.filter-row{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.chip{padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);font-size:12px;cursor:pointer;white-space:nowrap;color:var(--text-secondary);font-weight:500;transition:all .2s}
+.chip:hover{background:var(--surface-0)}
+.chip.active{background:linear-gradient(135deg, var(--primary), var(--accent));border-color:transparent;color:#fff;box-shadow:0 4px 10px rgba(236,72,153,0.3)}
 .chart-wrap{position:relative;width:100%}
 
-/* podium */
-.pi{display:flex;align-items:center;gap:10px;padding:9px 10px;background:var(--surface-1);border:.5px solid var(--border);border-radius:var(--radius);margin-bottom:6px;position:relative;overflow:hidden}
-.pi.r1{background:var(--green-bg);border-color:var(--green-border)}
-.pi-rank{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
-.pi-rank.k1{background:var(--green);color:#fff}
-.pi-rank.k2{background:#D3D1C7;color:#444}
-.pi-rank.k3{background:#B4B2A9;color:#fff}
+/* podium - colourful ranks */
+.pi{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,0.02)}
+.pi.r1{background:#FFFBEB;border-color:#FDE68A}
+.pi-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.pi-rank.k1{background:linear-gradient(135deg, #F59E0B, #FCD34D);color:#fff;box-shadow:0 2px 6px rgba(245,158,11,0.3)}
+.pi-rank.k2{background:linear-gradient(135deg, #9CA3AF, #E5E7EB);color:#1F2937;box-shadow:0 2px 6px rgba(156,163,175,0.3)}
+.pi-rank.k3{background:linear-gradient(135deg, #B45309, #F59E0B);color:#fff;box-shadow:0 2px 6px rgba(180,83,9,0.3)}
 .pi-rank.kn{background:var(--surface-0);color:var(--text-muted);font-size:11px}
-.pi-name{flex:1;font-size:13px;font-weight:500;color:var(--text-primary)}
-.pi-sub{font-size:10px;color:var(--text-secondary)}
-.pi-count{font-size:18px;font-weight:500;color:var(--text-primary)}
-.pi-bar-bg{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--surface-0)}
-.pi-bar{height:100%;background:var(--green);transition:width .6s ease}
-.mbadge{background:var(--green-bg);color:var(--green-dark);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500}
+.pi-name{flex:1;font-size:14px;font-weight:600;color:var(--text-primary)}
+.pi-sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.pi-count{font-size:20px;font-weight:600;color:var(--text-primary)}
+.pi-bar-bg{position:absolute;bottom:0;left:0;right:0;height:4px;background:transparent}
+.pi-bar{height:100%;background:linear-gradient(90deg, var(--primary), var(--accent));transition:width .8s cubic-bezier(0.34, 1.56, 0.64, 1);border-radius:0 4px 4px 0}
+.mbadge{background:var(--primary-bg);color:var(--primary-dark);font-size:11px;padding:4px 10px;border-radius:6px;font-weight:600}
 
-/* settings & talents */
-.gs-setup{background:#E6F1FB;border:.5px solid #B5D4F4;border-radius:var(--radius);padding:14px;margin-bottom:12px}
-.url-input{width:100%;padding:10px 12px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-2);color:var(--text-primary);outline:none;transition:border-color .15s;margin-bottom:8px}
-.url-input:focus{border-color:var(--green)}
-.gs-status{font-size:12px;padding:8px 12px;border-radius:var(--radius);margin-top:6px;display:none;line-height:1.5}
-.gs-status.ok{background:var(--green-bg);color:#085041;display:block}
-.gs-status.fail{background:var(--red-bg);color:#791F1F;display:block}
-.gs-status.warn{background:#FAEEDA;color:#633806;display:block}
+/* settings */
+.gs-setup{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:var(--radius);padding:16px;margin-bottom:16px}
+.url-input{width:100%;padding:12px 14px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-0);color:var(--text-primary);outline:none;transition:all .2s;margin-bottom:10px}
+.url-input:focus{border-color:var(--primary);background:var(--surface-2);box-shadow:0 0 0 3px var(--primary-bg)}
+.gs-status{font-size:12px;padding:10px 14px;border-radius:8px;margin-top:8px;display:none;line-height:1.5;font-weight:500}
+.gs-status.ok{background:#ECFDF5;color:#065F46;border:1px solid #A7F3D0;display:block}
+.gs-status.fail{background:var(--red-bg);color:#991B1B;border:1px solid var(--red-border);display:block}
+.gs-status.warn{background:#FFFBEB;color:#92400E;border:1px solid #FDE68A;display:block}
 
-.talent-mgmt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.talent-mgmt-header .title{font-size:14px;font-weight:500;color:var(--text-primary)}
-.talent-count-badge{font-size:12px;background:var(--surface-1);border:.5px solid var(--border);border-radius:20px;padding:3px 10px;color:var(--text-secondary)}
-.talent-actions{display:flex;gap:8px;margin-bottom:14px}
-.btn-sm-green{padding:8px 14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;flex:1;justify-content:center}
-.btn-sm-ghost{padding:8px 14px;background:transparent;color:var(--text-secondary);border:.5px solid var(--border);border-radius:var(--radius);font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .15s}
-.talent-search{width:100%;padding:9px 12px 9px 36px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);outline:none;transition:border-color .15s;margin-bottom:10px}
-.talent-search:focus{border-color:var(--green);background:var(--surface-2)}
-.search-wrap{position:relative;margin-bottom:10px}
-.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:16px;pointer-events:none}
-.talent-list-wrap{max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:5px}
-.ti-item{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface-1);border:.5px solid var(--border);border-radius:var(--radius);transition:background .15s}
-.ti-avatar{width:30px;height:30px;border-radius:50%;background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--green-dark);flex-shrink:0}
-.ti-code{font-size:11px;font-weight:500;color:var(--green-dark);background:var(--green-bg);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);white-space:nowrap}
-.ti-name{flex:1;font-size:13px;font-weight:500;color:var(--text-primary);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ti-acts{display:flex;gap:4px;flex-shrink:0}
-.ti-btn{width:28px;height:28px;border:.5px solid var(--border);border-radius:6px;background:var(--surface-2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:14px;transition:all .15s}
+.talent-mgmt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.talent-mgmt-header .title{font-size:15px;font-weight:600;color:var(--text-primary)}
+.talent-count-badge{font-size:12px;background:var(--surface-0);border:1px solid var(--border);border-radius:20px;padding:4px 12px;color:var(--text-secondary);font-weight:500}
+.talent-actions{display:flex;gap:8px;margin-bottom:16px}
+.btn-sm-primary{padding:10px 14px;background:linear-gradient(135deg, var(--primary), var(--accent));color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;flex:1;justify-content:center;box-shadow:0 2px 8px rgba(79,70,229,0.2)}
+.btn-sm-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(79,70,229,0.3)}
+.btn-sm-ghost{padding:10px 14px;background:var(--surface-2);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-sm-ghost:hover{background:var(--surface-0);border-color:#9CA3AF}
+.talent-search{width:100%;padding:12px 12px 12px 38px;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-0);color:var(--text-primary);outline:none;transition:all .2s;margin-bottom:12px}
+.talent-search:focus{border-color:var(--primary);background:var(--surface-2);box-shadow:0 0 0 3px var(--primary-bg)}
+.search-wrap{position:relative;margin-bottom:12px}
+.search-wrap i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:18px;pointer-events:none}
+.talent-list-wrap{max-height:360px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.ti-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);transition:all .2s}
+.ti-item:hover{background:var(--primary-bg);border-color:var(--primary-border)}
+.ti-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg, var(--primary), var(--accent));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;flex-shrink:0;box-shadow:0 2px 6px rgba(79,70,229,0.2)}
+.ti-code{font-size:11px;font-weight:600;color:var(--primary-dark);background:var(--primary-bg);padding:4px 8px;border-radius:6px;font-family:var(--font-mono);white-space:nowrap}
+.ti-name{flex:1;font-size:13px;font-weight:600;color:var(--text-primary);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ti-acts{display:flex;gap:6px;flex-shrink:0}
+.ti-btn{width:30px;height:30px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:14px;transition:all .2s}
+.ti-btn:hover{background:var(--surface-0);color:var(--text-primary)}
 .ti-btn.del{color:var(--red);border-color:var(--red-border);background:var(--red-bg)}
+.ti-btn.del:hover{background:#FEE2E2;color:#B91C1C}
 
 /* modal overlay */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,0.6);backdrop-filter:blur(3px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .2s}
 .modal-overlay.hidden{display:none}
-.modal{background:var(--surface-2);border-radius:14px;padding:20px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
-.modal-title{font-size:16px;font-weight:500;color:var(--text-primary);margin-bottom:4px}
-.modal-sub{font-size:13px;color:var(--text-secondary);margin-bottom:18px}
-.form-group{margin-bottom:14px}
-.form-label{font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px;display:block}
-.form-input{width:100%;padding:10px 12px;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);outline:none;transition:border-color .15s}
-.form-input:focus{border-color:var(--green);background:var(--surface-2)}
-.code-preview{font-size:13px;color:var(--text-muted);margin-top:5px}
-.code-preview strong{color:var(--green-dark);font-family:var(--font-mono)}
-.modal-actions{display:flex;gap:8px;margin-top:20px}
-.modal-actions .btn-cancel{flex:1;padding:11px;background:transparent;border:.5px solid var(--border);border-radius:var(--radius);font-size:14px;cursor:pointer;color:var(--text-secondary);transition:background .15s}
-.modal-actions .btn-save{flex:2;padding:11px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}
-.modal-actions .btn-save:disabled{background:#B4B2A9;cursor:not-allowed}
-.form-hint{font-size:11px;color:var(--text-muted);margin-top:4px}
-.form-error{font-size:12px;color:var(--red);margin-top:5px;display:none}
+.modal{background:var(--surface-2);border-radius:16px;padding:24px;width:100%;max-width:420px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);transform:translateY(0);animation:modalIn .3s ease-out}
+@keyframes modalIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+.modal-title{font-size:18px;font-weight:600;color:var(--text-primary);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text-secondary);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:8px;display:block}
+.form-input{width:100%;padding:12px 14px;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface-0);color:var(--text-primary);outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--primary);background:var(--surface-2);box-shadow:0 0 0 3px var(--primary-bg)}
+.code-preview{font-size:13px;color:var(--text-muted);margin-top:6px}
+.code-preview strong{color:var(--primary-dark);font-family:var(--font-mono);font-weight:600}
+.modal-actions{display:flex;gap:10px;margin-top:24px}
+.modal-actions .btn-cancel{flex:1;padding:12px;background:transparent;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer;color:var(--text-primary);transition:all .2s}
+.modal-actions .btn-cancel:hover{background:var(--surface-0)}
+.modal-actions .btn-save{flex:2;padding:12px;background:linear-gradient(135deg, var(--primary), var(--accent));color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(79,70,229,0.2)}
+.modal-actions .btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(79,70,229,0.3)}
+.modal-actions .btn-save:disabled{background:#D1D5DB;box-shadow:none;cursor:not-allowed;transform:none}
+.form-error{font-size:12px;color:var(--red);margin-top:6px;font-weight:500;display:none}
 .form-error.show{display:block}
-.del-icon{width:44px;height:44px;background:var(--red-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
-.del-icon i{font-size:22px;color:var(--red)}
-.modal-actions .btn-del{flex:2;padding:11px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:500;cursor:pointer}
+.del-icon{width:48px;height:48px;background:var(--red-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.del-icon i{font-size:24px;color:var(--red)}
+.modal-actions .btn-del{flex:2;padding:12px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(239,68,68,0.2)}
+.modal-actions .btn-del:hover{background:#DC2626;box-shadow:0 6px 16px rgba(239,68,68,0.3)}
 
-.dropzone{border:2px dashed var(--border);border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:10px;background:var(--surface-1)}
-.dropzone:hover,.dropzone.drag{border-color:var(--green);background:var(--green-bg)}
-.dropzone i{font-size:28px;color:var(--text-muted);display:block;margin-bottom:8px}
-.csv-preview{background:var(--surface-1);border:.5px solid var(--border);border-radius:var(--radius);padding:10px;max-height:140px;overflow-y:auto;margin-bottom:10px;display:none}
-.csv-row{font-size:12px;padding:4px 0;border-bottom:.5px solid var(--border);display:flex;gap:8px;align-items:center;color:var(--text-secondary)}
-.csv-info{font-size:12px;color:var(--green-dark);background:var(--green-bg);padding:6px 10px;border-radius:6px;margin-bottom:10px;display:none}
-.csv-err{font-size:12px;color:var(--red);background:var(--red-bg);padding:6px 10px;border-radius:6px;margin-bottom:10px;display:none}
+.dropzone{border:2px dashed var(--border);border-radius:var(--radius);padding:32px 24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;background:var(--surface-0)}
+.dropzone:hover,.dropzone.drag{border-color:var(--primary);background:var(--primary-bg)}
+.dropzone i{font-size:32px;color:var(--primary);display:block;margin-bottom:12px}
+.csv-preview{background:var(--surface-0);border:1px solid var(--border);border-radius:var(--radius);padding:12px;max-height:160px;overflow-y:auto;margin-bottom:12px;display:none}
+.csv-row{font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;color:var(--text-primary)}
+.csv-info{font-size:12px;color:var(--primary-dark);background:var(--primary-bg);padding:8px 12px;border-radius:8px;margin-bottom:12px;display:none;font-weight:500}
+.csv-err{font-size:12px;color:#991B1B;background:var(--red-bg);padding:8px 12px;border-radius:8px;margin-bottom:12px;display:none;font-weight:500}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
@@ -162,16 +194,17 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
    ============================================================ */
 @media (min-width: 900px) {
   html, body { background: var(--surface-1); }
-  .app { max-width: 1200px; margin: 40px auto; flex-direction: row; align-items: stretch; border-radius: 16px; box-shadow: 0 8px 48px rgba(0,0,0,0.12); }
-  .desktop-sidebar { width: 260px; background: var(--surface-2); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
-  .header { border-bottom: none; padding: 24px; margin-bottom: 10px; }
-  .tab-bar { flex-direction: column; padding: 0 16px; border-bottom: none; background: transparent; gap: 8px; }
-  .tab { justify-content: flex-start; padding: 14px 16px; border-radius: 12px; font-size: 14px; gap: 12px; }
-  .tab.active { background: var(--green-bg); color: var(--green-dark); }
-  .tab:hover:not(.active) { background: var(--surface-0); }
+  .app { max-width: 1200px; margin: 40px auto; flex-direction: row; align-items: stretch; border-radius: 20px; box-shadow: 0 10px 60px rgba(0,0,0,0.1); overflow:hidden; }
+  .desktop-sidebar { width: 280px; background: var(--surface-2); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .desktop-sidebar .header { border-bottom: none; padding: 28px 24px; margin-bottom: 0; border-radius:0; }
+  .tab-bar { flex-direction: column; padding: 24px 16px; border-bottom: none; background: transparent; gap: 8px; }
+  .tab { justify-content: flex-start; padding: 14px 18px; border-radius: 12px; font-size: 14px; gap: 14px; font-weight:600; color:var(--text-secondary); }
+  .tab i { font-size: 18px; }
+  .tab.active { background: #FDF2F8; color: #DB2777; border:none; }
+  .tab:hover:not(.active) { background: var(--surface-0); color:var(--text-primary); }
   .desktop-content { flex: 1; background: var(--surface-0); overflow-y: auto; display: flex; flex-direction: column; }
-  .page { padding: 32px; }
-  .page.active { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-content: start; }
+  .page { padding: 36px; }
+  .page.active { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-content: start; }
   #page-grafik .stat-row { grid-column: 1 / -1; }
 }
 @media (max-width: 899px) {
@@ -186,10 +219,10 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
 <div class="app">
   <div class="desktop-sidebar">
     <div class="header">
-      <div class="logo"><i class="ti ti-building" style="font-size:18px"></i></div>
+      <div class="logo"><i class="ti ti-building"></i></div>
       <div>
         <h1>Sistem Kasir Fakultas</h1>
-        <p>Pendataan Berdasarkan Fakultas</p>
+        <p>Pendataan Terpusat & Real-time</p>
       </div>
     </div>
     <div class="tab-bar">
@@ -201,9 +234,10 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
   </div>
 
   <div class="desktop-content">
+    <!-- PAGE: KASIR -->
     <div id="page-kasir" class="page active">
       <div class="card">
-        <div class="card-title"><i class="ti ti-store" aria-hidden="true"></i>Pilih unit bisnis/fasilitas</div>
+        <div class="card-title"><i class="ti ti-store" aria-hidden="true" style="color:var(--primary)"></i>Pilih unit bisnis/fasilitas</div>
         <div class="outlet-grid">
           <button class="outlet-btn" onclick="selectOutlet(this,'Minimarket Kopma UNY')">
             <div class="ob-dot"></div><div class="ob-name">Minimarket Kopma UNY</div>
@@ -225,17 +259,17 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
           <span id="selected-label">-</span>
         </div>
         <div class="card">
-          <div class="card-title"><i class="ti ti-building" aria-hidden="true"></i>Input kode fakultas</div>
+          <div class="card-title"><i class="ti ti-building" aria-hidden="true" style="color:var(--primary)"></i>Input kode fakultas</div>
           <input class="code-input" id="codeInput" type="text" placeholder="Contoh: FT, MIPA..." maxlength="30"
             oninput="handleInput(this)" onkeydown="if(event.key==='Enter')submitCode()">
           <div class="hint" id="hint"></div>
-          <button class="btn-green" id="submitBtn" onclick="submitCode()" disabled>
+          <button class="btn-primary" id="submitBtn" onclick="submitCode()" disabled>
             <i class="ti ti-check" aria-hidden="true"></i>Rekam kode
           </button>
           <button class="btn-ghost" onclick="clearOutlet()">Ganti unit bisnis</button>
         </div>
         <div class="card">
-          <div class="card-title"><i class="ti ti-history" aria-hidden="true"></i>Input terbaru hari ini</div>
+          <div class="card-title"><i class="ti ti-history" aria-hidden="true" style="color:var(--primary)"></i>Input terbaru hari ini</div>
           <div id="recent-list" class="recent-list">
             <div class="empty"><i class="ti ti-inbox" aria-hidden="true"></i>Belum ada input hari ini</div>
           </div>
@@ -243,24 +277,25 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
       </div>
     </div>
 
+    <!-- PAGE: GRAFIK -->
     <div id="page-grafik" class="page">
       <div class="stat-row">
-        <div class="sc"><div class="sc-label">Total data</div><div class="sc-val green" id="stat-total">0</div></div>
+        <div class="sc"><div class="sc-label">Total data</div><div class="sc-val primary" id="stat-total">0</div></div>
         <div class="sc"><div class="sc-label">Fakultas aktif</div><div class="sc-val" id="stat-active">0</div></div>
-        <div class="sc"><div class="sc-label">Bulan ini</div><div class="sc-val" id="stat-month" style="font-size:13px;padding-top:5px">-</div></div>
+        <div class="sc"><div class="sc-label">Bulan ini</div><div class="sc-val" id="stat-month" style="font-size:14px;padding-top:6px">-</div></div>
       </div>
       <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div style="display:flex;align-items:center;gap:8px">
-            <div style="font-size:14px;font-weight:500;color:var(--text-primary)">Papan kompetisi</div>
-            <div style="display:flex;align-items:center;gap:4px;background:#E1F5EE;border:.5px solid #9FE1CB;border-radius:20px;padding:2px 8px">
-              <div id="live-dot" style="width:6px;height:6px;border-radius:50%;background:#B4B2A9;animation:none" aria-hidden="true"></div>
-              <span style="font-size:11px;font-weight:500;color:#0F6E56">LIVE</span>
+            <div style="font-size:15px;font-weight:600;color:var(--text-primary)">Papan Kompetisi</div>
+            <div style="display:flex;align-items:center;gap:6px;background:#FCE7F3;border:1px solid #FBCFE8;border-radius:20px;padding:4px 10px">
+              <div id="live-dot" style="width:8px;height:8px;border-radius:50%;background:#B4B2A9;animation:none" aria-hidden="true"></div>
+              <span style="font-size:11px;font-weight:600;color:#BE185D">LIVE</span>
             </div>
           </div>
           <div style="text-align:right">
             <span class="mbadge" id="month-label">-</span>
-            <div id="grafik-sync-time" style="display:none;font-size:10px;color:var(--text-muted);margin-top:2px"></div>
+            <div id="grafik-sync-time" style="display:none;font-size:10px;color:var(--text-muted);margin-top:4px"></div>
           </div>
         </div>
         <div class="filter-row">
@@ -273,37 +308,39 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
         <div class="chart-wrap"><canvas id="chartCanvas"></canvas></div>
       </div>
       <div class="card">
-        <div style="font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:10px">Ranking Fakultas</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px">Ranking Fakultas</div>
         <div id="podium-list"></div>
       </div>
     </div>
 
+    <!-- PAGE: REKAP -->
     <div id="page-rekap" class="page">
       <div class="card">
-        <div style="font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:12px"><i class="ti ti-download" aria-hidden="true" style="margin-right:5px"></i>Export data</div>
-        <div id="rekap-stats" style="margin-bottom:12px"></div>
-        <button class="btn-green" onclick="fetchCloud(true)" style="margin-bottom:8px">
+        <div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px"><i class="ti ti-download" aria-hidden="true" style="margin-right:6px;color:var(--primary)"></i>Export data</div>
+        <div id="rekap-stats" style="margin-bottom:16px"></div>
+        <button class="btn-primary" onclick="fetchCloud(true)" style="margin-bottom:10px">
           <i class="ti ti-refresh" aria-hidden="true"></i>Sinkron sekarang
         </button>
-        <button class="btn-ghost" onclick="downloadCSV()"><i class="ti ti-file-spreadsheet" aria-hidden="true" style="margin-right:5px"></i>Unduh CSV</button>
+        <button class="btn-ghost" onclick="downloadCSV()"><i class="ti ti-file-spreadsheet" aria-hidden="true" style="margin-right:6px"></i>Unduh CSV</button>
         <button class="btn-danger" onclick="if(confirm('Hanya sembunyikan sementara dari perangkat ini?'))resetData()">Sembunyikan data bulan ini (sementara)</button>
-        <button class="btn-danger" style="margin-top:6px;border-color:#B4B2A9;color:var(--text-secondary)" onclick="clearPendingCache()"><i class="ti ti-eraser" aria-hidden="true" style="margin-right:5px"></i>Bersihkan cache pending lokal</button>
+        <button class="btn-danger" style="margin-top:8px;border-color:var(--border);color:var(--text-secondary)" onclick="clearPendingCache()"><i class="ti ti-eraser" aria-hidden="true" style="margin-right:6px"></i>Bersihkan cache pending lokal</button>
         <div id="sheets-status" class="gs-status"></div>
       </div>
       <div class="card">
-        <div style="font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:10px">Log seluruh transaksi</div>
-        <div id="full-log" style="max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:5px"></div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px">Log seluruh transaksi</div>
+        <div id="full-log" style="max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:6px"></div>
       </div>
     </div>
 
+    <!-- PAGE: PENGATURAN -->
     <div id="page-pengaturan" class="page">
       <div class="card">
         <div class="talent-mgmt-header">
-          <span class="title"><i class="ti ti-building" aria-hidden="true" style="margin-right:5px;color:var(--green)"></i>Daftar Fakultas Aktif</span>
+          <span class="title"><i class="ti ti-building" aria-hidden="true" style="margin-right:6px;color:var(--primary)"></i>Daftar Fakultas Aktif</span>
           <span class="talent-count-badge" id="talent-count-badge">0 fakultas</span>
         </div>
         <div class="talent-actions">
-          <button class="btn-sm-green" onclick="openAddModal()"><i class="ti ti-plus" aria-hidden="true"></i>Tambah</button>
+          <button class="btn-sm-primary" onclick="openAddModal()"><i class="ti ti-plus" aria-hidden="true"></i>Tambah</button>
           <button class="btn-sm-ghost" onclick="openImportModal()" title="Import dari CSV"><i class="ti ti-upload" aria-hidden="true"></i>Import CSV</button>
           <button class="btn-sm-ghost" onclick="exportFakultasCSV()" title="Export ke CSV"><i class="ti ti-download" aria-hidden="true"></i></button>
         </div>
@@ -315,21 +352,22 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
       </div>
 
       <div class="card">
-        <div style="font-size:14px;font-weight:500;color:var(--text-primary);margin-bottom:4px"><i class="ti ti-brand-google" aria-hidden="true" style="margin-right:5px"></i>Koneksi Google Sheets</div>
-        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:14px">Masukkan URL Web App dari file spreadsheet yang berbeda dengan aplikasi sebelumnya.</div>
-        <div style="font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:6px">URL Web App (Khusus Fakultas)</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px"><i class="ti ti-brand-google" aria-hidden="true" style="margin-right:6px;color:var(--primary)"></i>Koneksi Google Sheets</div>
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:1.5">Masukkan URL Web App dari file spreadsheet yang berbeda dengan aplikasi sebelumnya.</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:8px">URL Web App (Khusus Fakultas)</div>
         <input class="url-input" id="gsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" oninput="saveGsUrl()">
-        <button class="btn-green" onclick="testConnection()" style="margin-top:4px"><i class="ti ti-plug" aria-hidden="true"></i>Test koneksi</button>
+        <button class="btn-primary" onclick="testConnection()" style="margin-top:6px"><i class="ti ti-plug" aria-hidden="true"></i>Test koneksi</button>
         <div id="url-status" class="gs-status"></div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:14px;border-top:.5px solid var(--border)">
-          <div id="sync-dot" style="width:8px;height:8px;border-radius:50%;background:#B4B2A9;flex-shrink:0"></div>
-          <div style="font-size:12px;color:var(--text-secondary)" id="sync-status">Belum tersinkron</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+          <div id="sync-dot" style="width:10px;height:10px;border-radius:50%;background:#B4B2A9;flex-shrink:0"></div>
+          <div style="font-size:12px;font-weight:500;color:var(--text-secondary)" id="sync-status">Belum tersinkron</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ========== MODAL: TAMBAH / EDIT ========== -->
 <div class="modal-overlay hidden" id="modal-talent">
   <div class="modal">
     <div class="modal-title" id="modal-talent-title">Tambah Fakultas</div>
@@ -351,6 +389,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
   </div>
 </div>
 
+<!-- ========== MODAL: DELETE ========== -->
 <div class="modal-overlay hidden" id="modal-delete">
   <div class="modal">
     <div class="del-icon"><i class="ti ti-trash" aria-hidden="true"></i></div>
@@ -363,6 +402,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
   </div>
 </div>
 
+<!-- ========== MODAL: IMPORT CSV ========== -->
 <div class="modal-overlay hidden" id="modal-import">
   <div class="modal">
     <div class="modal-title">Import Fakultas dari CSV</div>
@@ -371,7 +411,7 @@ html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helveti
       ondragover="event.preventDefault();this.classList.add('drag')"
       ondragleave="this.classList.remove('drag')" ondrop="handleFileDrop(event)">
       <i class="ti ti-file-upload" aria-hidden="true"></i>
-      <p>Klik atau seret file CSV ke sini</p>
+      <p style="font-weight:500;color:var(--text-primary)">Klik atau seret file CSV ke sini</p>
     </div>
     <input type="file" id="csv-file-input" accept=".csv,text/csv" style="display:none" onchange="handleFileSelect(this)">
     <div class="csv-info" id="csv-info"></div>
@@ -406,8 +446,6 @@ async function loadFakultas() {
   try {
     const json = await jsonpRequest(url + '?action=read-talents&t=' + Date.now(), 8000);
     if (json.status === 'ok' && Array.isArray(json.talents)) {
-      // Data web ditimpa mutlak oleh data dari Spreadsheet
-      // Jika di Spreadsheet kosong (0 baris), web juga akan jadi 0
       FAKULTAS_LIST = json.talents;
       renderFakultasList();
     }
@@ -444,7 +482,6 @@ let syncTimerData = null;
 function startDataSync() {
   loadFakultas();
   if (syncTimerData) clearInterval(syncTimerData);
-  // Polling data fakultas setiap 8 detik agar antar device cepat tersinkron
   syncTimerData = setInterval(() => { if (!document.hidden) loadFakultas(); }, 8000);
 }
 
@@ -455,7 +492,6 @@ const MN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','D
 let selectedOutlet = null, barChart = null, activeFilter = 'Semua';
 
 let allData = [];
-// pendingLocal hanya untuk transaksi kasir (sementara hitungan detik sebelum masuk sheets)
 let pendingLocal = [];
 try { pendingLocal = JSON.parse(localStorage.getItem('fak_pending_v1') || '[]'); } catch(e) {}
 
@@ -477,7 +513,7 @@ function saveGsUrl() {
 function setSyncBadge(state, label) {
   const dot = document.getElementById('sync-dot'), st = document.getElementById('sync-status');
   if (!dot) return;
-  const colors = {ok:'#1D9E75',warn:'#E0A62E',fail:'#A32D2D',off:'#B4B2A9'};
+  const colors = {ok:'#4F46E5',warn:'#F59E0B',fail:'#EF4444',off:'#9CA3AF'};
   dot.style.background = colors[state] || colors.off;
   st.textContent = label;
 }
@@ -543,7 +579,7 @@ function showOfflineBanner(show) {
   let el = document.getElementById('offline-banner');
   if (!el) {
     el = document.createElement('div'); el.id = 'offline-banner';
-    el.style.cssText = 'background:#FAEEDA;border-bottom:.5px solid #E0A62E;padding:8px 16px;font-size:12px;color:#633806;text-align:center;display:none';
+    el.style.cssText = 'background:#FFFBEB;border-bottom:1px solid #FDE68A;padding:10px 16px;font-size:12px;font-weight:500;color:#92400E;text-align:center;display:none';
     el.innerHTML = '<i class="ti ti-wifi-off" style="margin-right:5px"></i>Belum terhubung ke Sheets...';
     document.querySelector('.app').insertBefore(el, document.querySelector('.tab-bar'));
   }
@@ -554,13 +590,12 @@ function updateSyncIndicatorGrafik(timeStr) {
   const el = document.getElementById('grafik-sync-time');
   if (el) { el.textContent = 'Update ' + timeStr; el.style.display = 'block'; }
   const dot = document.getElementById('live-dot');
-  if (dot) { dot.style.background = '#1D9E75'; dot.style.animation = 'pulse 2s ease-in-out infinite'; }
+  if (dot) { dot.style.background = '#EC4899'; dot.style.animation = 'pulse 2s ease-in-out infinite'; }
 }
 
 function startSync() {
   fetchCloud(false);
   if (syncTimer) clearInterval(syncTimer);
-  // Polling data transaksi setiap 5 detik
   syncTimer = setInterval(() => { if (!document.hidden) fetchCloud(false); }, 5000);
 }
 
@@ -673,21 +708,31 @@ function renderGrafik() {
   const top = counts.slice(0, 10);
   document.querySelector('.chart-wrap').style.height = Math.max(260, top.length * 30 + 60) + 'px';
   if (barChart) { barChart.destroy(); barChart = null; }
+  
+  // Vibrant colorful bars for chart
+  const vibrantColors = ['#4F46E5', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#6366F1'];
+  
   barChart = new Chart(document.getElementById('chartCanvas'), {
     type: 'bar',
     data: {
       labels: top.map(c => c.code),
-      datasets: [{data:top.map(c => c.count), backgroundColor: top.map((_,i) => i===0?'#1D9E75':i===1?'#5DCAA5':i===2?'#9FE1CB':'#D3D1C7'), borderRadius:4, borderSkipped:'start'}]
+      datasets: [{
+          data:top.map(c => c.count), 
+          backgroundColor: top.map((_,i) => vibrantColors[i % vibrantColors.length]), 
+          borderRadius:6, 
+          borderSkipped:'start'
+      }]
     },
     options: {
       indexAxis: 'y', responsive:true, maintainAspectRatio:false,
       plugins: {legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.raw} input`}}},
       scales: {
-        x: {beginAtZero:true, ticks:{stepSize:1,color:'#898781',font:{size:11}}, grid:{color:'rgba(0,0,0,0.05)'}, border:{display:false}},
-        y: {ticks:{color:'#0b0b0b',font:{size:12,weight:'500'}}, grid:{display:false}, border:{display:false}}
+        x: {beginAtZero:true, ticks:{stepSize:1,color:'#6B7280',font:{size:11}}, grid:{color:'rgba(0,0,0,0.04)'}, border:{display:false}},
+        y: {ticks:{color:'#1F2937',font:{size:13,weight:'600'}}, grid:{display:false}, border:{display:false}}
       }
     }
   });
+  
   const all = getCounts('Semua'); const max = all[0]?.count || 1;
   const pod = document.getElementById('podium-list');
   const wd = all.filter(c => c.count > 0);
@@ -707,10 +752,10 @@ function filterOutlet(btn, name) {
 function renderRekap() {
   const month = getMonthStr(); const md = allData.filter(d => d.month === month);
   const active = FAKULTAS_LIST.filter(t => md.some(d => d.code === t.code)).length;
-  document.getElementById('rekap-stats').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div class="sc"><div class="sc-label">Total entri</div><div class="sc-val green">${md.length}</div></div><div class="sc"><div class="sc-label">Fakultas aktif</div><div class="sc-val">${active}/${FAKULTAS_LIST.length}</div></div></div>`;
+  document.getElementById('rekap-stats').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="sc"><div class="sc-label">Total entri</div><div class="sc-val primary">${md.length}</div></div><div class="sc"><div class="sc-label">Fakultas aktif</div><div class="sc-val">${active}/${FAKULTAS_LIST.length}</div></div></div>`;
   const log = document.getElementById('full-log');
   if (!md.length) { log.innerHTML = '<div class="empty"><i class="ti ti-inbox" aria-hidden="true"></i>Belum ada data bulan ini</div>'; return; }
-  log.innerHTML = [...md].reverse().map(d => `<div class="ri"><span class="ri-code">${d.code}</span><div style="flex:1"><div class="ri-name">${d.name}</div><div style="font-size:10px;color:var(--text-muted)">${d.outlet}</div></div><span class="ri-time">${d.date} ${d.time}</span></div>`).join('');
+  log.innerHTML = [...md].reverse().map(d => `<div class="ri"><span class="ri-code">${d.code}</span><div style="flex:1"><div class="ri-name">${d.name}</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">${d.outlet}</div></div><span class="ri-time">${d.date} ${d.time}</span></div>`).join('');
 }
 
 function downloadCSV() {
@@ -751,7 +796,7 @@ function renderFakultasList(query = '') {
       <div class="ti-avatar">${ini}</div>
       <span class="ti-code">${t.code}</span>
       <span class="ti-name">${t.name}</span>
-      ${isNew ? '<span class="ti-new-badge">Baru</span>' : ''}
+      ${isNew ? '<span class="ti-new-badge" style="background:#FCE7F3;color:#BE185D;border:1px solid #FBCFE8;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600">Baru</span>' : ''}
       <div class="ti-acts">
         <button class="ti-btn" onclick="openEditModal('${t.code}')"><i class="ti ti-edit" aria-hidden="true"></i></button>
         <button class="ti-btn del" onclick="openDeleteModal('${t.code}')"><i class="ti ti-trash" aria-hidden="true"></i></button>
@@ -777,7 +822,7 @@ function openAddModal() {
   document.getElementById('code-preview-val').textContent = '-';
   document.getElementById('form-code-error').classList.remove('show');
   document.getElementById('btn-save-talent').disabled = true;
-  document.getElementById('btn-save-talent').textContent = 'Simpan';
+  document.getElementById('btn-save-talent').textContent = 'Simpan data';
   openModal('modal-talent');
   setTimeout(() => document.getElementById('form-fullname').focus(), 100);
 }
@@ -979,7 +1024,7 @@ function showToast(msg, err = false) {
   const el = document.getElementById('toast'); el.textContent = msg;
   el.className = 'toast' + (err ? ' err' : ''); void el.offsetWidth; el.classList.add('show');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
 }
 
 renderRecent();
